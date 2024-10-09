@@ -1,3 +1,4 @@
+/* PremixerController.ino: control premixer machine, by Hojun Kim. meringyee@gmail.com */
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
@@ -7,75 +8,98 @@
 #define BUTTON_PIN_1 3
 #define BUTTON_PIN_2 4
 
-// Constants
-const char DATA_ON = '1';
-const char DATA_OFF = '0';
-const int CHANGE_ANGLE = 90;
+class ServoModule {
+private:
+  Servo servo;
+  unsigned long start_time;
+  unsigned long wait_time;
+public:
+  ServoModule(int pin);
+  // declared as inline method for performance.
+  unsigned long getStartTime() const {
+    return start_time;
+  };
+  // declared as inline method for performance.
+  void setWaitTime(unsigned long time) {
+    wait_time = time;
+  };
+  // declared as inline method for performance.
+  unsigned long getWaitTime() const {
+    return wait_time;
+  };
+  void open();
+  void close();
+};
+
+class ButtonModule {
+private:
+  int pin;
+public:
+  ButtonModule(int pin);
+  // declared as inline method for performance.
+  int getState() const {
+    return digitalRead(pin);
+  };
+};
 
 // Modules
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 20, 4);
-Servo servo1, servo2;
+ServoModule s1(SERVO_PIN_1), s2(SERVO_PIN_2);
+ButtonModule b1(BUTTON_PIN_1), b2(BUTTON_PIN_2);
 
-// Interfaces
-void handleOpen(Servo* servo, unsigned long* start_time);
-void closeServo(Servo* servo);
-
-// Global variables
-int current_angle = 0;
-unsigned long open_start_time_1 = 0;
-unsigned long open_start_time_2 = 0;
+// Global variable
+unsigned long current_time = 0;
 
 void setup() {
-  // Initialize the LCD
   lcd.init();
   lcd.backlight();
-  // Initialize serial monitor
   Serial.begin(9600);
-  // Innitialize servo
-  servo1.attach(SERVO_PIN_1);
-  servo2.attach(SERVO_PIN_2);
-  // Initialize button
-  pinMode(BUTTON_PIN_1, INPUT);
-  pinMode(BUTTON_PIN_2, INPUT);
+
+  // set wait time 1000ms for testing
+  // note: add bluetooth module for set presets.
+  s1.setWaitTime(1000);
+  s2.setWaitTime(1000);
 }
 
 void loop() {
-  int button_state_1 = digitalRead(BUTTON_PIN_1);
-  int button_state_2 = digitalRead(BUTTON_PIN_2);
+  // check time per 0.1s
+  current_time = millis();
 
-  // Check button 1
-  if (button_state_1 == HIGH) {
-    handleOpen(&servo1, &open_start_time_1);
-  }
+  // #@@range_begin(module_1)
+  if (b1.getState() == HIGH) s1.open();
+  if (current_time - s1.getStartTime() >= s1.getWaitTime()) s1.close();
+  // #@@range_end(module_1)
 
-  // Check button 2
-  if (button_state_2 == HIGH) {
-    handleOpen(&servo2, &open_start_time_2);
-  }
+  // #@@range_begin(module_2)
+  if (b2.getState() == HIGH) s2.open();
+  if (current_time - s2.getStartTime() >= s2.getWaitTime()) s2.close();
+  // #@@range_end(module_2)
 
-  // Check if open time has passed for servo1
-  if (millis() - open_start_time_1 >= 1000) {
-    closeServo(&servo1);
-  }
-
-  // Check if open time has passed for servo2
-  if (millis() - open_start_time_2 >= 1000) {
-    closeServo(&servo2);
-  }
-
-  // Loop delay
+  // delay of loop
   delay(100);
 }
 
-void handleOpen(Servo* servo, unsigned long* start_time) {
-  *start_time = millis();
-  servo->write(0);
+ServoModule::ServoModule(int pin)
+  : servo(Servo()), start_time(0), wait_time(0) {
+  // set pin of servo module
+  servo.attach(pin);
+}
+
+void ServoModule::open() {
+  start_time = millis();
+  servo.write(0);
   lcd.setCursor(0, 0);
   lcd.print("Open!");
 }
 
-void closeServo(Servo* servo) {
-  servo->write(90);
+void ServoModule::close() {
+  servo.write(90);
   lcd.setCursor(0, 0);
   lcd.print("Close!");
+}
+
+ButtonModule::ButtonModule(int pin)
+  : pin(pin) {
+  // set pin of button module
+  pinMode(pin, INPUT);
 }
