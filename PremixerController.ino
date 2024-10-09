@@ -1,6 +1,5 @@
 /* PremixerController.ino: handle premixer machine, by Hojun Kim. meringyee@gmail.com */
 #include <LiquidCrystal_I2C.h>
-#include <Servo.h>
 #include "ServoModule.h"
 #include "ButtonModule.h"
 

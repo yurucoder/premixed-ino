@@ -1,3 +1,4 @@
+/* ButtonModule.h: handle button module, by Hojun Kim. meringyee@gmail.com */
 #ifndef BUTTON_MODULE_H
 #define BUTTON_MODULE_H
 

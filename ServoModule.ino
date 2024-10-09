@@ -1,3 +1,4 @@
+/* ServoModule.ino: handle servo module, by Hojun Kim. meringyee@gmail.com */
 #include "ServoModule.h"
 
 ServoModule::ServoModule(int pin)

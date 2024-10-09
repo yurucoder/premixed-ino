@@ -1,5 +1,8 @@
+/* ServoModule.h: handle servo module, by Hojun Kim. meringyee@gmail.com */
 #ifndef SERVO_MODULE_H
 #define SERVO_MODULE_H
+
+#include <Servo.h>
 
 class ServoModule {
 private:
