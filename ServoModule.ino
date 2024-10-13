@@ -11,11 +11,11 @@ void ServoModule::open() {
   start_time = millis();
   servo.write(0);
   // lcd.setCursor(0, 0);
-  // lcd.print("Open!");
+  // lcd.println("Open!");
 }
 
 void ServoModule::close() {
   servo.write(90);
   // lcd.setCursor(0, 0);
-  // lcd.print("Close!");
+  // lcd.println("Close!");
 }

@@ -20,6 +20,7 @@ unsigned long current_time = 0;
 void setup() {
   lcd.init();
   lcd.backlight();
+  lcd.println("Hello");
   Serial.begin(9600);
 
   // set wait time 1000ms for testing
