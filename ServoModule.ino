@@ -10,12 +10,8 @@ ServoModule::ServoModule(int pin)
 void ServoModule::open() {
   start_time = millis();
   servo.write(0);
-  // lcd.setCursor(0, 0);
-  // lcd.println("Open!");
 }
 
 void ServoModule::close() {
   servo.write(90);
-  // lcd.setCursor(0, 0);
-  // lcd.println("Close!");
 }

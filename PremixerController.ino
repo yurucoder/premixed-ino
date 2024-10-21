@@ -1,5 +1,7 @@
 /* PremixerController.ino: handle premixer machine, by Hojun Kim. meringyee@gmail.com */
 #include <LiquidCrystal_I2C.h>
+#include <Arduino_JSON.h>
+#include <ArduinoBlue.h>
 #include "ServoModule.h"
 #include "ButtonModule.h"
 
@@ -17,6 +19,9 @@ ButtonModule b1(BUTTON_PIN_1), b2(BUTTON_PIN_2);
 // Global variable
 unsigned long current_time = 0;
 
+// Sample json data
+const char input[] = "{\"result\":true,\"count\":42,\"foo\":\"bar\"}";
+
 void setup() {
   lcd.init();
   lcd.backlight();
@@ -27,6 +32,9 @@ void setup() {
   // note: add bluetooth module for set presets.
   s1.setWaitTime(1000);
   s2.setWaitTime(1000);
+
+  // Json object
+  // JSONVar myObject = JSON.parse(input);
 }
 
 void loop() {
