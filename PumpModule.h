@@ -1,4 +1,4 @@
-/* ServoModule.h: handle servo module, by Hojun Kim. meringyee@gmail.com */
+/* PumpModule.h: handle pump module, by Hojun Kim. meringyee@gmail.com */
 #ifndef PUMP_MODULE_H
 #define PUMP_MODULE_H
 

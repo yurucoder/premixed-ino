@@ -1,3 +1,4 @@
+/* PumpModule.h: handle pump module, by Hojun Kim. meringyee@gmail.com */
 #include "PumpModule.h"
 
 PumpModule::PumpModule(int pinP, int pinN)
